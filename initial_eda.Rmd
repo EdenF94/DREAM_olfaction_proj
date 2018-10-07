@@ -19,11 +19,31 @@ library(ggfortify)
 library(OpenImageR)
 library(fastICA)
 library(NMF)
-olfaction_data <- read.csv('training_set.txt', header = T, sep = '\t')
+# olfaction_data <- read.csv('training_set.txt', header = T, sep = '\t')
 mol_disc <- read.csv('molecular_descriptors.txt', header = T, sep = '\t')
-olfaction_data
+# olfaction_data
 mol_disc
 ```
+
+```{r include=FALSE}
+
+# read in labels
+labels <- read.delim("training_set.txt")
+
+# str(labels)
+# colnames(labels)
+
+# Make factors
+labels$VALENCE.PLEASANTNESS <- factor(labels$VALENCE.PLEASANTNESS)
+levels(labels$VALENCE.PLEASANTNESS) <- list("Unpleasent" = c("1", 1:33), "Neutral" = c(34:66), "Pleasant" = c(67:100))
+
+# Subset
+var_labs <- subset(labels, Intensity == "high ", select = c("Compound.Identifier", "VALENCE.PLEASANTNESS"))
+str(var_labs)
+
+```
+
+
 
 
 PCA of molecular descriptor data (to 50 dimensions from 4870)

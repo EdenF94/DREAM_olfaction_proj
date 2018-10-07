@@ -1,0 +1,31 @@
+---
+title: "Olfaction Data"
+author: "Vidya Koesmahargyo"
+date: "10/7/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(dplyr)
+olfaction_data <- read.csv('training_set.txt', header = T, sep = '\t')
+mol_desc <- read.csv('molecular_descriptors.txt', header = T, sep = '\t')
+olfaction_data
+mol_desc
+```
+
+```{r}
+#olfaction_data <- na.omit(olfaction_data)
+
+#olfaction_data <- filter(olfaction_data["Intensity" == "low"])
+
+olfaction_data$CID <- olfaction_data$Compound.Identifier
+olfaction_data
+
+joined <- merge(olfaction_data, mol_desc, by = "CID")
+joined
+```
+

@@ -20,9 +20,9 @@ library(OpenImageR)
 library(fastICA)
 library(NMF)
 # olfaction_data <- read.csv('training_set.txt', header = T, sep = '\t')
-mol_disc <- read.csv('molecular_descriptors.txt', header = T, sep = '\t')
+molec_disc <- read.csv('molecular_descriptors.txt', header = T, sep = '\t')
 # olfaction_data
-mol_disc
+molec_disc
 ```
 
 ```{r include=FALSE}

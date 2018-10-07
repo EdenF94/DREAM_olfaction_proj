@@ -19,15 +19,15 @@ molec_disc_pca <- data.frame(molec_disc)
 #which(apply(molec_disc_pca, 2, var)==0) ## lookin for columns with a variance of 0
 
 molec_disc_pca <- molec_disc_pca[ , apply(molec_disc_pca,2,var)!=0] # using only columns with variance > 0
-identifiers <- molec_disc_pca[ , 1]
+identifiers <- molec_disc_pca[ , 1] # setting the CID column separately
 
-molec_disc_pca <- molec_disc_pca[ , 2:ncol(molec_disc_pca) ]
+molec_disc_pca <- molec_disc_pca[ , 2:ncol(molec_disc_pca) ] # setting all other columns
 dim(molec_disc_pca)
 
 as.tibble(molec_disc_pca)
 pca <- prcomp(molec_disc_pca, scale. = T) # scaling pca
 autoplot(pca)
-pca$sdev
+
 screeplot(pca, 100, main='Screeplot of Olfaction data', type='l')
 
 
@@ -38,6 +38,12 @@ prop_varex <- pr_var/sum(pr_var)
 plot(cumsum(prop_varex), type='b', main="Cumulative Sum Screeplot", xlab='Principle Component', ylab='Total Variance Proportion')
 dim(molec_disc_pca)
 
-initial_model <- pca$rotation[, 1:50]
+initial_model <- pca$rotation[, 1:50] # grabbing the first 50 PC rotations (scores)
 dim(initial_model)
-initial_model_scores <- as.matrix(molec_disc_pca) %*% initial_model ### Data after PCA is done
+
+initial_model_scores <- as.matrix(molec_disc_pca) %*% initial_model ### Data after PCA is done...matrix multiplication
+
+molec_data_dim_red <- data.frame(cbind(identifiers, initial_model_scores)) # combining the CID column w/ rest
+
+colnames(molec_data_dim_red)[1] <- "CID" # renaming column
+

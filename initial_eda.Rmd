@@ -9,6 +9,8 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+
+Loading in the data:
 ```{r}
 library(dplyr)
 library(tibble)
@@ -18,16 +20,61 @@ library(OpenImageR)
 library(fastICA)
 library(NMF)
 olfaction_data <- read.csv('training_set.txt', header = T, sep = '\t')
-mol_desc <- read.csv('molecular_descriptors.txt', header = T, sep = '\t')
+mol_disc <- read.csv('molecular_descriptors.txt', header = T, sep = '\t')
 olfaction_data
-mol_desc
+mol_disc
 ```
 
+
+PCA of molecular descriptor data (to 50 dimensions from 4870)
+```{r }
+#molec_desc <- read.csv('molecular_descriptors.txt', header=T, sep='\t')
+molec_disc <- na.omit(molec_disc)
+
+
+#molec_disc_pca <- data.frame(molec_disc[,2:4870])
+molec_disc_pca <- data.frame(molec_disc)
+
+
+#which(apply(molec_disc_pca, 2, var)==0) ## lookin for columns with a variance of 0
+
+molec_disc_pca <- molec_disc_pca[ , apply(molec_disc_pca,2,var)!=0] # using only columns with variance > 0
+identifiers <- molec_disc_pca[ , 1] # setting the CID column separately
+
+molec_disc_pca <- molec_disc_pca[ , 2:ncol(molec_disc_pca) ] # setting all other columns
+dim(molec_disc_pca)
+
+as.tibble(molec_disc_pca)
+pca <- prcomp(molec_disc_pca, scale. = T) # scaling pca
+autoplot(pca)
+
+screeplot(pca, 100, main='Screeplot of Olfaction data', type='l')
+
+
+## cumulative scree plot
+std_dev <- pca$sdev
+pr_var <- std_dev^2
+prop_varex <- pr_var/sum(pr_var)
+plot(cumsum(prop_varex), type='b', main="Cumulative Sum Screeplot", xlab='Principle Component', ylab='Total Variance Proportion')
+dim(molec_disc_pca)
+
+initial_model <- pca$rotation[, 1:50] # grabbing the first 50 PC rotations (scores)
+dim(initial_model)
+
+initial_model_scores <- as.matrix(molec_disc_pca) %*% initial_model ### Data after PCA is done...matrix multiplication
+
+molec_data_dim_red <- data.frame(cbind(identifiers, initial_model_scores)) # combining the CID column w/ rest
+
+colnames(molec_data_dim_red)[1] <- "CID" # renaming column
+```
+
+Created new column CID; did an inner merge by CID for molecular descriptors and perception data
 ```{r}
-#joining data
+#joining data,
 olfaction_data$CID <- olfaction_data$Compound.Identifier
 
-joined <- merge(olfaction_data, mol_desc, by = "CID")
+#joined <- merge(olfaction_data, mol_desc, by = "CID")
+joined <- merge(olfaction_data, molec_data_dim_red, by = "CID")
 head(joined)
 
 ```

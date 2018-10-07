@@ -34,5 +34,5 @@ head(joined)
 ```{r}
 #olfaction_data <- na.omit(olfaction_data)
 levels(joined$Intensity)
-filter(joined, Intensity == "high ")
+joined_high <- filter(joined, Intensity == "high ")
 ```

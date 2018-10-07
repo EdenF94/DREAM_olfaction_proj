@@ -38,8 +38,8 @@ labels$VALENCE.PLEASANTNESS <- factor(labels$VALENCE.PLEASANTNESS)
 levels(labels$VALENCE.PLEASANTNESS) <- list("Unpleasent" = c("1", 1:33), "Neutral" = c(34:66), "Pleasant" = c(67:100))
 
 # Subset
-var_labs <- subset(labels, Intensity == "high ", select = c("Compound.Identifier", "VALENCE.PLEASANTNESS"))
-str(var_labs)
+olfaction_data <- subset(labels, Intensity == "high ", select = c("Compound.Identifier", "VALENCE.PLEASANTNESS"))
+str(olfaction_data)
 
 ```
 
@@ -95,7 +95,10 @@ olfaction_data$CID <- olfaction_data$Compound.Identifier
 
 #joined <- merge(olfaction_data, mol_desc, by = "CID")
 joined <- merge(olfaction_data, molec_data_dim_red, by = "CID")
+joined[, -2]
 head(joined)
+
+dim(joined)
 
 ```
 ```{r}

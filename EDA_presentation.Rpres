@@ -1,0 +1,38 @@
+Exploratory Data Analysis: Olfaction Prediction Data
+========================================================
+author: Vidya Koesmahargyo
+Eden Feldman
+Kit McDonald
+date: 10/8/18
+
+autosize: true
+
+First Slide
+========================================================
+Data Refresher
+
+-Olfaction data
+-Predict valence and intensity given the physical/molecular structure
+-High and low intensity
+-Valence and strength on 0-100 scale
+-Molecular descriptors (~4800)
+-Compounds (~470)
+
+Slide With Refresher
+========================================================
+Data at First Glance?
+
+
+Slide With Data
+========================================================
+Principal Component Analysis
+
+-No variance 4870 -> 3077
+-Ran PCA to reduce the amount of dimensions
+
+Slide With PCA
+========================================================
+Next Steps
+
+Slide With Steps
+========================================================

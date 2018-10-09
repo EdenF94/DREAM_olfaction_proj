@@ -35,7 +35,7 @@ labels <- read.delim("training_set.txt")
 
 # Make factors
 labels$VALENCE.PLEASANTNESS <- factor(labels$VALENCE.PLEASANTNESS)
-levels(labels$VALENCE.PLEASANTNESS) <- list("Unpleasent" = c("1", 1:33), "Neutral" = c(34:66), "Pleasant" = c(67:100))
+levels(labels$VALENCE.PLEASANTNESS) <- list("Unpleasent" = c(0:33), "Neutral" = c(34:66), "Pleasant" = c(67:100))
 
 # Subset
 olfaction_data <- subset(labels, Intensity == "high ", select = c("Compound.Identifier", "VALENCE.PLEASANTNESS"))
@@ -78,14 +78,9 @@ prop_varex <- pr_var/sum(pr_var)
 plot(cumsum(prop_varex), type='b', main="Cumulative Sum Screeplot", xlab='Principle Component', ylab='Total Variance Proportion')
 dim(molec_disc_pca)
 
-initial_model <- pca$rotation[, 1:50] # grabbing the first 50 PC rotations (scores)
-dim(initial_model)
+data.frame(cbind(identifiers, molec_disc_pca))
+colnames(molec_disc_pca)[1] <- "CID" # <- rename to CID
 
-initial_model_scores <- as.matrix(molec_disc_pca) %*% initial_model ### Data after PCA is done...matrix multiplication
-
-molec_data_dim_red <- data.frame(cbind(identifiers, initial_model_scores)) # combining the CID column w/ rest
-
-colnames(molec_data_dim_red)[1] <- "CID" # renaming column
 ```
 
 Created new column CID; did an inner merge by CID for molecular descriptors and perception data
@@ -94,7 +89,7 @@ Created new column CID; did an inner merge by CID for molecular descriptors and 
 olfaction_data$CID <- olfaction_data$Compound.Identifier
 
 #joined <- merge(olfaction_data, mol_desc, by = "CID")
-joined <- merge(olfaction_data, molec_data_dim_red, by = "CID")
+joined <- merge(olfaction_data, molec_disc_pca, by = "CID")
 joined[, -2]
 head(joined)
 
@@ -104,5 +99,12 @@ dim(joined)
 ```{r}
 #olfaction_data <- na.omit(olfaction_data)
 levels(joined$Intensity)
-joined_high <- filter(joined, Intensity == "high ")
+#joined_high <- filter(joined, Intensity == "high ")
+```
+
+```{r }
+library(factoextra)
+fviz_eig(pca)
+#fviz_pca_var(pca,col.var = 'contrib',  gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),repel=TRUE)
+fviz_pca_biplot(pca, repel = TRUE,col.var = "#2E9FDF",col.ind = "#696969")
 ```

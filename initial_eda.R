@@ -35,15 +35,21 @@ screeplot(pca, 100, main='Screeplot of Olfaction data', type='l')
 std_dev <- pca$sdev
 pr_var <- std_dev^2
 prop_varex <- pr_var/sum(pr_var)
+sum(prop_varex[1:50])
 plot(cumsum(prop_varex), type='b', main="Cumulative Sum Screeplot", xlab='Principle Component', ylab='Total Variance Proportion')
-dim(molec_disc_pca)
-
+abline(h=0.897,col='red',v=50)
+as.tibble(pca$x[,1:50])
 initial_model <- pca$rotation[, 1:50] # grabbing the first 50 PC rotations (scores)
 dim(initial_model)
 
 initial_model_scores <- as.matrix(molec_disc_pca) %*% initial_model ### Data after PCA is done...matrix multiplication
-
+as.tibble(initial_model_scores)
 molec_data_dim_red <- data.frame(cbind(identifiers, initial_model_scores)) # combining the CID column w/ rest
 
 colnames(molec_data_dim_red)[1] <- "CID" # renaming column
 
+
+library(factoextra)
+fviz_eig(pca)
+fviz_pca_var(pca, col.var = 'contrib',  gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),repel=TRUE)
+fviz_pca_biplot(pca, repel = TRUE,col.var = "#2E9FDF",col.ind = "#696969")

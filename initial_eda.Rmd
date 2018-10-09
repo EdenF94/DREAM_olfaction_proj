@@ -20,9 +20,9 @@ library(OpenImageR)
 library(fastICA)
 library(NMF)
 # olfaction_data <- read.csv('training_set.txt', header = T, sep = '\t')
-molec_disc <- read.csv('molecular_descriptors.txt', header = T, sep = '\t')
+molec_desc <- read.csv('molecular_descriptors.txt', header = T, sep = '\t')
 # olfaction_data
-molec_disc
+molec_desc
 ```
 
 ```{r include=FALSE}
@@ -38,7 +38,7 @@ labels$VALENCE.PLEASANTNESS <- factor(labels$VALENCE.PLEASANTNESS)
 levels(labels$VALENCE.PLEASANTNESS) <- list("Unpleasent" = c(0:33), "Neutral" = c(34:66), "Pleasant" = c(67:100))
 
 labels$INTENSITY.STRENGTH <- factor(labels$INTENSITY.STRENGTH)
-levels(labels$INTENSITY.STRENGTH) <- list("Low" = c("1", 1:33), "Medium" = c(34:66), "High" = c(67:100))
+levels(labels$INTENSITY.STRENGTH) <- list("Low" = c(0:33), "Medium" = c(34:66), "High" = c(67:100))
 
 # Subset
 olfaction_data <- subset(labels, Intensity == "high ", select = c("Compound.Identifier", "VALENCE.PLEASANTNESS", "INTENSITY.STRENGTH"))
@@ -52,23 +52,23 @@ str(olfaction_data)
 PCA of molecular descriptor data (to 50 dimensions from 4870)
 ```{r }
 #molec_desc <- read.csv('molecular_descriptors.txt', header=T, sep='\t')
-molec_disc <- na.omit(molec_disc)
+molec_desc <- na.omit(molec_desc)
 
 
 #molec_disc_pca <- data.frame(molec_disc[,2:4870])
-molec_disc_pca <- data.frame(molec_disc)
+molec_desc_pca <- data.frame(molec_desc)
 
 
 #which(apply(molec_disc_pca, 2, var)==0) ## lookin for columns with a variance of 0
 
-molec_disc_pca <- molec_disc_pca[ , apply(molec_disc_pca,2,var)!=0] # using only columns with variance > 0
-identifiers <- molec_disc_pca[ , 1] # setting the CID column separately
+molec_desc_pca <- molec_desc_pca[ , apply(molec_desc_pca,2,var)!=0] # using only columns with variance > 0
+identifiers <- molec_desc_pca[ , 1] # setting the CID column separately
 
-molec_disc_pca <- molec_disc_pca[ , 2:ncol(molec_disc_pca) ] # setting all other columns
-dim(molec_disc_pca)
+molec_desc_pca <- molec_desc_pca[ , 2:ncol(molec_desc_pca) ] # setting all other columns
+dim(molec_desc_pca)
 
-as.tibble(molec_disc_pca)
-pca <- prcomp(molec_disc_pca, scale. = T) # scaling pca
+as.tibble(molec_desc_pca)
+pca <- prcomp(molec_desc_pca, scale. = T) # scaling pca
 autoplot(pca)
 
 screeplot(pca, 100, main='Screeplot of Olfaction data', type='l')
@@ -79,10 +79,10 @@ std_dev <- pca$sdev
 pr_var <- std_dev^2
 prop_varex <- pr_var/sum(pr_var)
 plot(cumsum(prop_varex), type='b', main="Cumulative Sum Screeplot", xlab='Principle Component', ylab='Total Variance Proportion')
-dim(molec_disc_pca)
+dim(molec_desc_pca)
 
-data.frame(cbind(identifiers, molec_disc_pca))
-colnames(molec_disc_pca)[1] <- "CID" # <- rename to CID
+data.frame(cbind(identifiers, molec_desc_pca))
+colnames(molec_desc_pca)[1] <- "CID" # <- rename to CID
 
 ```
 
@@ -92,7 +92,7 @@ Created new column CID; did an inner merge by CID for molecular descriptors and 
 olfaction_data$CID <- olfaction_data$Compound.Identifier
 
 #joined <- merge(olfaction_data, mol_desc, by = "CID")
-joined <- merge(olfaction_data, molec_disc_pca, by = "CID")
+joined <- merge(olfaction_data, molec_desc_pca, by = "CID")
 joined[, -2]
 head(joined)
 
@@ -102,11 +102,11 @@ dim(joined)
 <<<<<<< HEAD
 ```{r}
 #olfaction_data <- na.omit(olfaction_data)
-levels(joined$Intensity)
+#levels(joined$Intensity)
 #joined_high <- filter(joined, Intensity == "high ")
 ```
 
-```{r }
+```{r}
 library(factoextra)
 fviz_eig(pca)
 #fviz_pca_var(pca,col.var = 'contrib',  gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),repel=TRUE)

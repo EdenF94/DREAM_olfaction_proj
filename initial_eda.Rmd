@@ -49,7 +49,7 @@ str(olfaction_data)
 
 
 
-PCA of molecular descriptor data (to 50 dimensions from 4870)
+PCA of molecular descriptor data
 ```{r }
 #molec_desc <- read.csv('molecular_descriptors.txt', header=T, sep='\t')
 molec_desc <- na.omit(molec_desc)
@@ -83,23 +83,28 @@ dim(molec_desc_pca)
 
 data.frame(cbind(identifiers, molec_desc_pca))
 colnames(molec_desc_pca)[1] <- "CID" # <- rename to CID
-
+print(colnames(molec_desc_pca)[1])
 ```
 
 Created new column CID; did an inner merge by CID for molecular descriptors and perception data
 ```{r}
 #joining data,
-olfaction_data$CID <- olfaction_data$Compound.Identifier
+print(molec_desc_pca)
 
+
+olfaction_data$CID <- olfaction_data$Compound.Identifier
+print(olfaction_data$CID)
 #joined <- merge(olfaction_data, mol_desc, by = "CID")
 joined <- merge(olfaction_data, molec_desc_pca, by = "CID")
+dim(joined)
 joined[, -2]
 head(joined)
 
 dim(joined)
 
 ```
-<<<<<<< HEAD
+
+
 ```{r}
 #olfaction_data <- na.omit(olfaction_data)
 #levels(joined$Intensity)
@@ -108,9 +113,9 @@ dim(joined)
 
 ```{r}
 library(factoextra)
-fviz_eig(pca)
+#fviz_eig(pca)
 #fviz_pca_var(pca,col.var = 'contrib',  gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),repel=TRUE)
-fviz_pca_biplot(pca, repel = TRUE,col.var = "#2E9FDF",col.ind = "#696969")
+#fviz_pca_biplot(pca, repel = TRUE,col.var = "#2E9FDF",col.ind = "#696969")
 ```
 =======
 

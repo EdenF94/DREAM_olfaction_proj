@@ -36,14 +36,15 @@ colnames(labels)
 
 # Make factors
 labels$VALENCE.PLEASANTNESS <- factor(labels$VALENCE.PLEASANTNESS)
-levels(labels$VALENCE.PLEASANTNESS) <- list("Unpleasent" = c(0:33), "Neutral" = c(34:66), "Pleasant" = c(67:100))
+levels(labels$VALENCE.PLEASANTNESS) <- list("Unpleasent" = c(0:34), "Neutral" = c(34:67), "Pleasant" = c(67:100))
 
 labels$INTENSITY.STRENGTH <- factor(labels$INTENSITY.STRENGTH)
-levels(labels$INTENSITY.STRENGTH) <- list("Low" = c(0:33), "Medium" = c(34:66), "High" = c(67:100))
+levels(labels$INTENSITY.STRENGTH) <- list("Low" = c(0:34), "Medium" = c(34:67), "High" = c(67:100))
 
 # Subset
 olfaction_data <- subset(labels, Intensity == "high ", select = c("Compound.Identifier", "VALENCE.PLEASANTNESS", "INTENSITY.STRENGTH"))
 str(olfaction_data)
+olfaction_data <- na.omit(olfaction_data)
 
 ```
 

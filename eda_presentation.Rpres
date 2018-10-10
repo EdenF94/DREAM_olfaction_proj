@@ -28,6 +28,7 @@ library(ggplot2)
 library(ggfortify)
 library(OpenImageR)
 library(fastICA)
+library(caret)
 library(NMF)
 
 ```

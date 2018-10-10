@@ -100,6 +100,10 @@ molec_desc <- na.omit(molec_desc)
 
 # Remove columns with no variance
 molec_desc <- molec_desc[ ,(apply(molec_desc,2,var)!=0)]
+
+# Molecular Descriptors with near zero variance
+nzv <- nearZeroVar(molec_desc_pca, saveMetrics= TRUE)
+nzv[nzv$nzv,]
 ```
 
 Data Cleaning
@@ -224,5 +228,6 @@ plot(cumsum(prop_varex), type='b', main="Cumulative Sum Screeplot", xlab='Princi
 Next Steps
 ========================================================
 
-
+- Impute NAs for molecular descriptors
+- Percept NA cleaning
 

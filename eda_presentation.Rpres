@@ -1,0 +1,37 @@
+Exploratory Data Analysis: Olfaction Prediction Data
+========================================================
+author: 
+</br>Vidya Koesmahargyo 
+</br>Kit McDonald
+</br>Eden Feldman
+
+10/11/18
+
+
+========================================================
+
+Data Refresher
+
+- Olfaction data
+  - Predict valence and intensity given the physical/molecular structure
+  - High and low intensity
+  - Valence and strength on 0-100 scale
+- Molecular descriptors (~4800)
+- Compounds (~470)
+
+
+========================================================
+
+Data at First Glance
+
+```{r}
+
+```
+
+========================================================
+
+Principal Component Analysis
+
+========================================================
+
+Next Steps

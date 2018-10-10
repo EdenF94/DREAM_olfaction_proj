@@ -19,6 +19,9 @@ molec_disc_pca <- data.frame(molec_disc)
 #which(apply(molec_disc_pca, 2, var)==0) ## lookin for columns with a variance of 0
 
 molec_disc_pca <- molec_disc_pca[ , apply(molec_disc_pca,2,var)!=0] # using only columns with variance > 0
+dim(molec_desc_pca)
+molec_disc_pca <- molec_disc_pca[ , apply(molec_disc_pca,2,var)!=0]
+dim(molec_desc_pca)
 identifiers <- molec_disc_pca[ , 1] # setting the CID column separately
 
 molec_disc_pca <- molec_disc_pca[ , 2:ncol(molec_disc_pca) ] # setting all other columns

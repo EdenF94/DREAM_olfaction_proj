@@ -101,17 +101,9 @@ molec_desc <- na.omit(molec_desc)
 dim(molec_desc)
 # Remove columns with no variance
 molec_desc <- molec_desc[ ,(apply(molec_desc,2,var)!=0)]
-
-```
-
-Data Cleaning
-========================================================
-
-```{r echo=FALSE}
-
 dim(molec_desc)
-
 ```
+
 
 Creating Factors for Valence and Intensity
 ========================================================

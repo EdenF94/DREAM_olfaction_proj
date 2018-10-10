@@ -102,19 +102,13 @@ dim(molec_desc)
 # Remove columns with no variance
 molec_desc <- molec_desc[ ,(apply(molec_desc,2,var)!=0)]
 
-
-# Molecular Descriptors with near zero variance
-nzv <- nearZeroVar(molec_desc_pca, saveMetrics= TRUE)
-nzv[nzv$nzv,]
 ```
 
 Data Cleaning
 ========================================================
 
 ```{r echo=FALSE}
-molec_desc
-# str(labels)
-=======
+
 dim(molec_desc)
 
 ```
@@ -229,6 +223,13 @@ prop_varex <- pr_var/sum(pr_var)
 plot(cumsum(prop_varex), type='b', main="Cumulative Sum Screeplot", xlab='Principle Component', ylab='Total Variance Proportion')
 ```
 
+Molecular Descriptors with Near Zero Variance
+========================================================
+```{r}
+
+nzv <- nearZeroVar(molec_desc_pca, saveMetrics= TRUE)
+nzv[nzv$nzv,]
+```
 
 Next Steps
 ========================================================

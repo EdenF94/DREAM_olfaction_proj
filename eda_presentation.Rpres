@@ -100,7 +100,6 @@ molec_desc <- na.omit(molec_desc)
 dim(molec_desc)
 # Remove columns with no variance
 molec_desc <- molec_desc[ ,(apply(molec_desc,2,var)!=0)]
-<<<<<<< HEAD
 
 # Molecular Descriptors with near zero variance
 nzv <- nearZeroVar(molec_desc_pca, saveMetrics= TRUE)

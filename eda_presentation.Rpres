@@ -49,7 +49,7 @@ Data at First Glance Cont...
 
 ```{r}
 
-str(molec_desc)
+str(head(molec_desc))
 
 ```
 
@@ -58,7 +58,7 @@ Data at First Glance Cont(2)...
 
 ```{r}
 
-str(labels)
+str(head(labels))
 
 ```
 
@@ -97,17 +97,10 @@ Pre-Process Molecular Descriptor Data
 ```{r}
 # Remove rows with NA values
 molec_desc <- na.omit(molec_desc)
-
+dim(molec_desc)
 # Remove columns with no variance
 molec_desc <- molec_desc[ ,(apply(molec_desc,2,var)!=0)]
-```
-
-Data Cleaning
-========================================================
-
-```{r echo=FALSE}
-molec_desc
-# str(labels)
+dim(molec_desc)
 ```
 
 Creating Factors for Valence and Intensity

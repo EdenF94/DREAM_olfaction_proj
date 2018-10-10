@@ -16,11 +16,12 @@ Data Refresher
   - Valence and strength on 0-100 scale
 - Molecular descriptors (~4800)
 - Compounds (~470)
+- Participants (~49)
 
 
 Data at First Glance
 ========================================================
-```{r libraries, message=FALSE, warning=FALSE, include=FALSE}
+```{r libraries, message=FALSE, warning=FALSE, include=FALSE, echo=FALSE}
 library(dplyr)
 library(tibble)
 library(ggplot2)
@@ -99,6 +100,14 @@ molec_desc <- na.omit(molec_desc)
 
 # Remove columns with no variance
 molec_desc <- molec_desc[ ,(apply(molec_desc,2,var)!=0)]
+```
+
+Data Cleaning
+========================================================
+
+```{r echo=FALSE}
+molec_desc
+# str(labels)
 ```
 
 Creating Factors for Valence and Intensity

@@ -9,8 +9,9 @@ olfaction_train_data <- read.csv('training_set.txt', header = T, sep = '\t')
 olfaction_train_data
 
 molec_disc <- read.csv('molecular_descriptors.txt', header=T, sep='\t')
+dim(molec_disc)
 molec_disc <- na.omit(molec_disc)
-
+dim(molec_disc)
 
 #molec_disc_pca <- data.frame(molec_disc[,2:4870])
 molec_disc_pca <- data.frame(molec_disc)

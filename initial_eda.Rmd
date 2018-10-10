@@ -97,7 +97,7 @@ olfaction_data$CID <- olfaction_data$Compound.Identifier
 #joined <- merge(olfaction_data, mol_desc, by = "CID")
 joined <- merge(olfaction_data, molec_desc_pca, by = "CID")
 dim(joined)
-joined[, -2]
+joined <- joined[, -2]
 head(joined)
 
 dim(joined)

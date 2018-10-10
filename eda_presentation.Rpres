@@ -16,16 +16,10 @@ Data Refresher
   - Valence and strength on 0-100 scale
 - Molecular descriptors (~4800)
 - Compounds (~470)
+- Participants (~49)
 
 
-Data at First Glance
-========================================================
-
-```{r}
-
-```
-
-Data Cleaning
+Data at First Glance: Percept Descriptors
 ========================================================
 
 ```{r echo=FALSE}
@@ -38,13 +32,20 @@ library(fastICA)
 library(NMF)
 molec_desc <- read.csv('molecular_descriptors.txt', header = T, sep = '\t')
 # olfaction_data
-molec_desc
+
 
 # read in labels
 labels <- read.delim("training_set.txt")
 
-# str(labels)
 colnames(labels)
+```
+
+Data Cleaning
+========================================================
+
+```{r echo=FALSE}
+molec_desc
+# str(labels)
 ```
 
 Creating Factors for Valence and Intensity

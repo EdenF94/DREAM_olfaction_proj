@@ -101,6 +101,7 @@ dim(molec_desc)
 # Remove columns with no variance
 molec_desc <- molec_desc[ ,(apply(molec_desc,2,var)!=0)]
 
+
 # Molecular Descriptors with near zero variance
 nzv <- nearZeroVar(molec_desc_pca, saveMetrics= TRUE)
 nzv[nzv$nzv,]
@@ -114,7 +115,7 @@ molec_desc
 # str(labels)
 =======
 dim(molec_desc)
->>>>>>> 514ea26c6f2d408436495a6fc72d9ae61630c692
+
 ```
 
 Creating Factors for Valence and Intensity

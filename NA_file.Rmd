@@ -1,0 +1,47 @@
+---
+title: "NA_file"
+author: "Kathleen McDonald"
+date: "October 10, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(dplyr)
+```
+
+
+
+```{r}
+# read in file
+molec_desc <- read.delim('molecular_descriptors.txt', stringsAsFactors = FALSE)
+
+# check for NA values
+any(is.na(molec_desc))
+
+# get colnames and number of NAs
+lst <- sapply(molec_desc, function(x) sum(is.na(x)))
+
+# values missing 2 or more
+lst_1 <- subset(lst, lst > 1)
+
+# values missing 3 or more
+lst_2 <- subset(lst, lst > 2)
+
+# values missing 4 or more
+lst_3 <- subset(lst, lst > 3)
+
+# Print total number of columns with varying amount of NAs
+sum(lst) # 1+ NA
+sum(lst_1) # 2+ NA
+sum(lst_2) # 3+ NA
+sum(lst_3) # 4+ NA ... there are none
+
+# Print first 10 col names with 3 or more NAs
+lst_2[1:10]
+
+```
+

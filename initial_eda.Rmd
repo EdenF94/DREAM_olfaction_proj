@@ -98,7 +98,7 @@ levels(labels$INTENSITY.STRENGTH) <- list("Low" = c(0:33), "Medium" = c(34:66), 
 olfaction_data <- subset(labels, Intensity == "high ", select = c("Compound.Identifier", "Odor", "VALENCE.PLEASANTNESS", "INTENSITY.STRENGTH"))
 
 # Rename Compound Identifier column
-colnames(olfaction_data)[1] <- "CID"
+#colnames(olfaction_data)[1] <- "CID"
 
 # Examine new dataframe
 dim(olfaction_data)
@@ -109,12 +109,16 @@ str(olfaction_data)
 
 ```{r New dataframe with data and labels}
 
+# Rename Compound Identifier column
+colnames(olfaction_data)[1] <- "CID"
+
 # Merge data and labels
 total_olfac <- merge(x = molec_desc, y = olfaction_data, by= "CID", all.y = TRUE)
 
 # Examine data
 head(total_olfac)
 dim(total_olfac)
+
 
 ```
 
@@ -170,6 +174,23 @@ std_dev <- pca$sdev
 pr_var <- std_dev^2
 prop_varex <- pr_var/sum(pr_var)
 plot(cumsum(prop_varex), type='b', main="Cumulative Sum Screeplot", xlab='Principle Component', ylab='Total Variance Proportion')
+
+```
+
+
+```{r }
+print(tail(colnames(total_olfac)))
+```
+
+```{r }
+labels <- total_olfac$Odor
+
+olfac_no_label <- subset(total_olfac, select = -c(1, 3076, 30))
+
+set.seed(1000009)
+km <- kmeans(olfac_no_label, 471, nstart=20)
+
+print(km$centers)
 
 ```
 

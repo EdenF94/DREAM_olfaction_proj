@@ -179,19 +179,33 @@ plot(cumsum(prop_varex), type='b', main="Cumulative Sum Screeplot", xlab='Princi
 
 
 ```{r }
-print(tail(colnames(total_olfac)))
+print(head(colnames(total_olfac)))
+dim(total_olfac)
 ```
 
 ```{r }
 labels <- total_olfac$Odor
 
-olfac_no_label <- subset(total_olfac, select = -c(1, 3076, 30))
+olfac_no_label <- subset(total_olfac, select = -c(1,2,3,4))
 
 set.seed(1000009)
-km <- kmeans(olfac_no_label, 471, nstart=20)
+olfac_no_label <- na.omit(olfac_no_label)
+km <- kmeans(olfac_no_label, 47, nstart=20)
 
 print(km$centers)
 
+```
+
+```{r fig.height=500, fig.width=500}
+library(cluster)
+library(fpc)
+
+#plotcluster(olfac_no_label, km$cluster)
+plot(olfac_no_label, col=km$cluster)
+```
+
+```{r }
+any(is.na(olfac_no_label))
 ```
 
 

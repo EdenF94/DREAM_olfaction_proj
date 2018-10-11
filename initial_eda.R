@@ -32,7 +32,7 @@ pca <- prcomp(molec_disc_pca, scale. = T) # scaling pca
 autoplot(pca)
 
 screeplot(pca, 100, main='Screeplot of Olfaction data', type='l')
-
+?kmeans()
 
 ## cumulative scree plot
 std_dev <- pca$sdev

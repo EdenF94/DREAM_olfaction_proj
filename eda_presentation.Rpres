@@ -218,7 +218,6 @@ plot(cumsum(prop_varex), type='b', main="Cumulative Sum Screeplot", xlab='Princi
 Molecular Descriptors with Near Zero Variance
 ========================================================
 ```{r}
-
 nzv <- nearZeroVar(molec_desc_pca, saveMetrics= TRUE)
 nzv[nzv$nzv,]
 ```
@@ -228,4 +227,5 @@ Next Steps
 
 - Impute NAs for molecular descriptors
 - Percept NA cleaning
+- Model the data: Random Forest
 

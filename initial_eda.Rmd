@@ -113,7 +113,7 @@ str(olfaction_data)
 colnames(olfaction_data)[1] <- "CID"
 
 # Merge data and labels
-total_olfac <- merge(x = molec_desc, y = olfaction_data, by= "CID", all.y = TRUE)
+total_olfac <- merge(x = olfaction_data, y = molec_desc, by= "CID", all.x = TRUE)
 
 # Examine data
 head(total_olfac)

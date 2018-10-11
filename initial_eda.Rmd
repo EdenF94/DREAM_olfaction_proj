@@ -110,7 +110,7 @@ str(olfaction_data)
 ```{r New dataframe with data and labels}
 
 # Merge data and labels
-total_olfac <- merge(x = molec_desc, y = olfaction_data, by= "CID", all.y = TRUE)
+total_olfac <- merge(x = olfaction_data, y = molec_desc, by= "CID", all.x = TRUE)
 
 # Examine data
 head(total_olfac)

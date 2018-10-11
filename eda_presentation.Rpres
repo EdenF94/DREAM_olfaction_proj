@@ -179,6 +179,24 @@ ggplot(total_olfac) + geom_bar(aes(x=VALENCE.PLEASANTNESS, fill = INTENSITY.STRE
 ```
 
 
+Valence NA Values
+========================================================
+```{r include=FALSE}
+labels_2 <- read.delim("training_set.txt", stringsAsFactors = FALSE)
+
+lab_sub <- subset(labels_2, Intensity == "high ", select = c("VALENCE.PLEASANTNESS", "INTENSITY.STRENGTH"))
+
+lab_sub <- subset(lab_sub, INTENSITY.STRENGTH == 0)
+```
+
+```{r}
+sum(is.na(lab_sub$VALENCE.PLEASANTNESS))
+sum(lab_sub$INTENSITY.STRENGTH == 0)
+
+head(lab_sub)
+```
+
+
 
 Principal Component Analysis
 ========================================================

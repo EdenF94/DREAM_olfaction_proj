@@ -1,0 +1,197 @@
+library(dplyr)
+library(tibble)
+library(ggplot2)
+library(caret)
+library(glmnet)
+library(randomForest)
+
+# Molecuar data and labels
+molec_desc <- read.delim('molecular_descriptors.txt', stringsAsFactors = FALSE)
+labels <- read.delim("training_set.txt", stringsAsFactors = FALSE)
+
+# Examine data
+head(molec_desc)
+dim(molec_desc)
+str(molec_desc)
+
+head(labels)
+dim(labels)
+str(labels)
+
+# Check for NA values
+any(is.na(molec_desc))
+
+# Get colnames and number of NAs
+na_lst <- sapply(molec_desc, function(x) sum(is.na(x)))
+
+# Find sum of NAs by row
+na_row_lst <- apply(molec_desc, MARGIN = 1, function(x) sum(is.na(x)))
+
+# Find row with NAs
+row_na <- as.vector(which(na_row_lst > 0 %in% molec_desc))
+
+# Show rows in molec_desc with NAs and count
+(na_row_table <- cbind("Row Index" = row_na, "Total NAs" = na_row_lst[row_na]))
+
+# Make factors
+labels$VALENCE.PLEASANTNESS <- factor(labels$VALENCE.PLEASANTNESS)
+levels(labels$VALENCE.PLEASANTNESS) <- list("Unpleasant" = c(0:33), "Neutral" = c(34:66), "Pleasant" = c(67:100))
+
+labels$INTENSITY.STRENGTH <- factor(labels$INTENSITY.STRENGTH)
+levels(labels$INTENSITY.STRENGTH) <- list("Low" = c(0:33), "Medium" = c(34:66), "High" = c(67:100))
+
+# Subset
+olfaction_data <- subset(labels, Intensity == "high ", select = c("Compound.Identifier", "Odor", "VALENCE.PLEASANTNESS", "INTENSITY.STRENGTH"))
+
+# Rename Compound Identifier column
+colnames(olfaction_data)[1] <- "CID"
+
+# Examine new dataframe
+dim(olfaction_data)
+str(olfaction_data)
+
+# Merge data and labels
+total_olfac <- merge(x = olfaction_data, y = molec_desc, by= "CID", all.x = TRUE)
+
+# Examine data
+head(total_olfac)
+dim(total_olfac)
+
+nzv <- nearZeroVar(molec_desc_pca, saveMetrics= TRUE)
+#look at each nzv descriptor and select more closely
+#filtered_molec_desc <- molec_desc_pca[unlist(nzv)]
+
+(na_row_table <- cbind("Row Index" = row_na, "Total NAs" = na_row_lst[row_na]))
+
+# Remove rows with NA values
+molec_desc <- na.omit(molec_desc)
+
+# Remove columns with no variance
+molec_desc <- molec_desc[ ,(apply(molec_desc,2,var)!=0)]
+
+na_lst <- sapply(molec_desc, function(x) sum(is.na(x)))
+
+# Find sum of NAs by row
+na_row_lst <- apply(molec_desc, MARGIN = 1, function(x) sum(is.na(x)))
+
+# Find row with NAs
+row_na <- as.vector(which(na_row_lst > 0 %in% molec_desc))
+
+# Show rows in molec_desc with NAs and count
+(na_row_table <- cbind("Row Index" = row_na, "Total NAs" = na_row_lst[row_na]))
+
+labels <- total_olfac$Odor
+
+olfac_no_label <- subset(total_olfac, select = -c(1,2,3,4))
+set.seed(1000009)
+olfac_no_label <- na.omit(olfac_no_label)
+
+
+rf_olfac <- subset(total_olfac, select = -c(1,3,4))
+rf_olfac <- na.omit(rf_olfac)
+rf_olfac$Odor <- factor(rf_olfac$Odor)
+
+train_size <- floor(0.75 * nrow(rf_olfac))
+set.seed(1000009)
+train_pos <- sample(seq_len(nrow(rf_olfac)), size = train_size)
+
+trainrf <- rf_olfac[train_pos, ]
+valrf <- rf_olfac[-train_pos, ]
+
+dim(trainrf)
+dim(valrf)
+
+set.seed(1000009)
+exclude <- c('Odor')
+RF_classification <- randomForest(Odor ~ ., data = trainrf,  importance = TRUE, oob.times = 15, confusion = TRUE, na.action=na.roughfix)
+RF_classification
+plot(RF_classification$err.rate[,1], type = "l", ylab = "Error rate", xlab = "Number of trees")
+dev.copy(png,'RandomForest.png')
+dev.off()
+importance(RF_classification)
+
+hier_dist <- dist(olfac_no_label, method = "euclidean")
+hier_clust <- hclust(hier_dist, method = "average")
+hier_clust
+plot(hier_clust)
+dev.copy(png,'HierClust.png')
+dev.off()
+
+
+total_olfac$Odor <-factor(total_olfac$Odor)
+any(is.na(total_olfac))
+# Find sum of NAs by row
+na_row_lst <- apply(total_olfac, MARGIN = 1, function(x) sum(is.na(x)))
+
+# Find row with NAs
+row_na <- as.vector(which(na_row_lst > 0 %in% total_olfac))
+
+# Show rows in molec_desc with NAs and count
+(na_row_table <- cbind("Row Index" = row_na, "Total NAs" = na_row_lst[row_na]))
+
+total_olfac <- na.omit(total_olfac)
+
+train_size <- floor(0.75 * nrow(total_olfac))
+set.seed(1000009)
+train_pos <- sample(seq_len(nrow(total_olfac)), size = train_size)
+
+lassotrain <- total_olfac[train_pos, ]
+lassotrain <- subset(lassotrain, select = -c(1,2,3,4))
+labeltrain<- total_olfac[train_pos,]$INTENSITY.STRENGTH
+lassoval <- total_olfac[-train_pos, ]
+lassoval <- subset(lassoval, select = -c(1,2,3,4))
+labelval<- total_olfac[-train_pos,]$INTENSITY.STRENGTH
+
+dim(lassotrain)
+dim(lassoval)
+
+#Lasso
+set.seed(1000009)
+help(train)
+ctrl <- trainControl(method="cv", number=5, savePredictions = TRUE, classProbs=TRUE)
+lasso <- train(lassotrain, labeltrain, method = "glmnet", 
+               trControl = ctrl)
+
+lasso
+lasso_pred <- predict(lasso, newdata = lassoval)
+confusionMatrix(table(lasso_pred, reference = labelval))
+plot(x = roc(predictor = lasso_pred$pred$High, response = lasso_pred$pred$obs)$specificities, y = roc(predictor = lasso_pred$pred$High, response = lasso_pred$pred$obs)$sensitivities, col= "blue", xlim = c(1, 0), type ="l", ylab = "Sensitivity", xlab = "Specificity")
+dev.copy(png,'Lasso.png')
+dev.off()
+
+#SVMRAD
+set.seed(1000009)
+ctrl <- trainControl(method = "repeatedcv", repeats = 5,classProbs = T, savePredictions = T)
+svm_rad <- train(lassotrain, labeltrain, data = train_classification, method = "svmRadial", tuneLength = 10, trControl = ctrl)
+svm_rad
+
+svm_test <- predict(svm_rad, newdata = lassoval)
+confusionMatrix(svm_test, reference = labelval)
+plot(x = roc(predictor = svm_rad$pred$High, response = svm_rad$pred$obs)$specificities, y = roc(predictor = svm_rad$pred$High, response = svm_rad$pred$obs)$sensitivities, col= "blue", xlim = c(1, 0), type ="l", ylab = "Sensitivity", xlab = "Specificity")
+dev.copy(png,'SVMRad.png')
+dev.off()
+
+#SVMLIN
+set.seed(1000009)
+ctrl <- trainControl(method = "repeatedcv", repeats = 5,classProbs = T, savePredictions = T)
+svm_rad <- train(lassotrain, labeltrain, data = train_classification, method = "svmLinear", tuneLength = 10, trControl = ctrl)
+svm_rad
+
+svm_test <- predict(svm_rad, newdata = lassoval)
+confusionMatrix(svm_test, reference = labelval)
+plot(x = roc(predictor = svm_rad$pred$High, response = svm_rad$pred$obs)$specificities, y = roc(predictor = svm_rad$pred$High, response = svm_rad$pred$obs)$sensitivities, col= "blue", xlim = c(1, 0), type ="l", ylab = "Sensitivity", xlab = "Specificity")
+dev.copy(png,'SVMLin')
+dev.off()
+
+#SVMPOLY
+set.seed(1000009)
+ctrl <- trainControl(method = "repeatedcv", repeats = 5,classProbs = T, savePredictions = T)
+svm_rad <- train(lassotrain, labeltrain, data = train_classification, method = "svmPoly", tuneLength = 10, trControl = ctrl)
+svm_rad
+
+svm_test <- predict(svm_rad, newdata = lassoval)
+confusionMatrix(svm_test, reference = labelval)
+plot(x = roc(predictor = svm_rad$pred$High, response = svm_rad$pred$obs)$specificities, y = roc(predictor = svm_rad$pred$High, response = svm_rad$pred$obs)$sensitivities, col= "blue", xlim = c(1, 0), type ="l", ylab = "Sensitivity", xlab = "Specificity")
+dev.copy(png,'SVMPoly')
+dev.off()
+

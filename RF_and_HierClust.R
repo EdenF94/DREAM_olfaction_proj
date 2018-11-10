@@ -34,33 +34,28 @@ train_pos <- sample(seq_len(nrow(olfac_intensity)), size = train_size)
 train_set <- olfac_intensity[train_pos,]
 test_set <- olfac_intensity[-train_pos,]
 
-
-
 # Hierarchical Clustering
 hier_dist <- dist(olfac_intensity[c(-1)], method = "euclidean")
 hier_clust <- hclust(hier_dist, method = "average")
-hier_clust
-plot(hier_clust)
-dev.copy(png,'HierClust.png')
-dev.off()
-
+print(hier_clust)
+hier_plot <- plot(hier_clust)
+print(hier_plot)
 
 
 # Random Forest
 RF_classification <- randomForest(INTENSITY.STRENGTH ~ ., data = train_set, importance = TRUE, oob.times = 15, confusion = TRUE)
-RF_classification
+print(RF_classification)
 
 # Plot error based on number of trees
-plot(RF_classification$err.rate[,1], type = "l", ylab = "Error rate", xlab = "Number of trees", main = "Random Forest: Error Rate vs Number of Trees")
-dev.copy(png,'RandomForest.png')
-dev.off()
+rf_error_plot <- plot(RF_classification$err.rate[,1], type = "l", ylab = "Error rate", xlab = "Number of trees", main = "Random Forest: Error Rate vs Number of Trees")
+print(rf_error_plot)
 
 # View importance
-importance(RF_classification)
+print(importance(RF_classification))
 
 # Predict
 RF_pred <- predict(RF_classification, newdata=test_set)
 
 # Make confusion matrix
-confusionMatrix(RF_pred, reference = test_set$INTENSITY.STRENGTH)
-
+RF_cm <- confusionMatrix(RF_pred, reference = test_set$INTENSITY.STRENGTH)
+print(RF_cm)

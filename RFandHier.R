@@ -3,8 +3,6 @@ library(tibble)
 library(ggplot2)
 library(ggfortify)
 library(OpenImageR)
-library(fastICA)
-library(NMF)
 library(caret)
 library(randomForest)
 
@@ -32,13 +30,13 @@ colnames(olfaction_data)[1] <- "CID"
 
 
 # Merge data and labels
-total_olfac <- merge(x = olfaction_data, y = molec_desc, by= "CID", all.x = TRUE)
+total_olfac <- merge(x = olfaction_data, y = molec_desc, by= "CID")
 
 #variance selection: near zero variance
-nzv <- nearZeroVar(molec_desc_pca, saveMetrics= TRUE)
+#nzv <- nearZeroVar(molec_desc_pca, saveMetrics= TRUE)
 
 #look at each nzv descriptor and select more closely
-filtered_molec_desc <- molec_desc_pca[unlist(nzv)]
+#filtered_molec_desc <- molec_desc_pca[unlist(nzv)]
 
 labels <- total_olfac$Odor
 olfac_no_label <- subset(total_olfac, select = -c(1,2,3,4))
@@ -64,7 +62,7 @@ exclude <- c('Odor')
 RF_classification <- randomForest(Odor ~ ., data = trainrf,  importance = TRUE, oob.times = 15, confusion = TRUE, na.action=na.roughfix)
 
 RF_classification
-RF <-plot(RF_classification$err.rate[,1], type = "l", ylab = "Error rate", xlab = "Number of trees")
+plot(RF_classification$err.rate[,1], type = "l", ylab = "Error rate", xlab = "Number of trees")
 dev.copy(png,'RandomForest.png')
 dev.off()
 importance(RF_classification)

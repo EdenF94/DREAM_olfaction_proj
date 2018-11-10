@@ -10,9 +10,10 @@ total_olfac <- read.csv("Olfaction_Merged.csv", stringsAsFactors = FALSE)
 # Create Factors for labels
 total_olfac$INTENSITY.STRENGTH <- factor(total_olfac$INTENSITY.STRENGTH)
 total_olfac$VALENCE.PLEASANTNESS <- factor(total_olfac$VALENCE.PLEASANTNESS)
-as.tibble(total_olfac)
+
 
 # Intensity df
+labels_odor <- total_olfac$Odor
 olfac_intensity <- subset(total_olfac, select = -c(1,2,3,4))
 olfac_valence <- subset(total_olfac, select= -c(1,2,3,4))
 
@@ -47,7 +48,7 @@ test_set <- olfac_intensity[-train_pos,]
 
 # Hierarchical Clustering
 hier_dist <- dist(olfac_intensity[c(-1)], method = "euclidean")
-hier_clust <- hclust(hier_dist, method = "average")
+hier_clust <- hclust(hier_dist, method = "average", labels=labels_odor)
 hier_clust
 plot(hier_clust)
 dev.copy(png,'HierClust.png')

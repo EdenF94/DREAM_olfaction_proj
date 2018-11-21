@@ -1,0 +1,87 @@
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Loading required package: lattice
+Loading required package: Matrix
+Loading required package: foreach
+Loaded glmnet 2.0-16
+
+randomForest 4.6-14
+Type rfNews() to see new features/changes/bug fixes.
+
+Attaching package: ‘randomForest’
+
+The following object is masked from ‘package:ggplot2’:
+
+    margin
+
+The following object is masked from ‘package:dplyr’:
+
+    combine
+
+ [1] "CID"                    "Odor"                   "VALENCE.PLEASANTNESS"  
+ [4] "INTENSITY.STRENGTH"     "complexity.from.pubmed" "MW"                    
+ [7] "AMW"                    "Sv"                     "Se"                    
+[10] "Sp"                    
+glmnet 
+
+13009 samples
+ 3077 predictors
+    3 classes: 'High', 'Low', 'Medium' 
+
+No pre-processing
+Resampling: Cross-Validated (5 fold) 
+Summary of sample sizes: 10407, 10407, 10407, 10407, 10408 
+Resampling results across tuning parameters:
+
+  alpha  lambda        Accuracy   Kappa    
+  0.10   0.0001729374  0.6211857  0.3419064
+  0.10   0.0017293741  0.6207245  0.3381765
+  0.10   0.0172937413  0.6116533  0.3074090
+  0.55   0.0001729374  0.6214163  0.3419738
+  0.55   0.0017293741  0.6149589  0.3211485
+  0.55   0.0172937413  0.5873622  0.2500138
+  1.00   0.0001729374  0.6214162  0.3411908
+  1.00   0.0017293741  0.6111923  0.3105428
+  1.00   0.0172937413  0.5683756  0.2032349
+
+Accuracy was used to select the optimal model using the largest value.
+The final values used for the model were alpha = 0.55 and lambda = 0.0001729374.
+Confusion Matrix and Statistics
+
+          Reference
+Prediction High  Low Medium
+    High   1778  439    637
+    Low     248  920    219
+    Medium   35   31     30
+
+Overall Statistics
+                                          
+               Accuracy : 0.629           
+                 95% CI : (0.6144, 0.6434)
+    No Information Rate : 0.4752          
+    P-Value [Acc > NIR] : < 2.2e-16       
+                                          
+                  Kappa : 0.3606          
+ Mcnemar's Test P-Value : < 2.2e-16       
+
+Statistics by Class:
+
+                     Class: High Class: Low Class: Medium
+Sensitivity               0.8627     0.6619      0.033860
+Specificity               0.5272     0.8415      0.980875
+Pos Pred Value            0.6230     0.6633      0.312500
+Neg Pred Value            0.8092     0.8407      0.798161
+Prevalence                0.4752     0.3205      0.204289
+Detection Rate            0.4100     0.2121      0.006917
+Detection Prevalence      0.6581     0.3198      0.022135
+Balanced Accuracy         0.6950     0.7517      0.507368
+line search fails -0.7711438 0.1266568 1.428022e-05 -1.401734e-05 -1.245478e-08 9.979192e-09 -3.177387e-13line search fails -0.7855101 0.1181078 1.463691e-05 -1.406922e-05 -1.344431e-08 9.70345e-09 -3.333031e-13line search fails -0.8034054 0.1007092 1.621308e-05 -1.565204e-05 -1.410343e-08 1.080616e-08 -3.977986e-13slurmstepd: error: *** JOB 336706 ON gpu-0004 CANCELLED AT 2018-11-13T03:34:10 DUE TO TIME LIMIT ***

@@ -1,0 +1,35 @@
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Loaded gbm 2.1.4
+Loading required package: lattice
+Loading required package: Matrix
+Loading required package: foreach
+Loaded glmnet 2.0-16
+
+randomForest 4.6-14
+Type rfNews() to see new features/changes/bug fixes.
+
+Attaching package: ‘randomForest’
+
+The following object is masked from ‘package:ggplot2’:
+
+    margin
+
+The following object is masked from ‘package:dplyr’:
+
+    combine
+
+ [1] "CID"                    "Odor"                   "VALENCE.PLEASANTNESS"  
+ [4] "INTENSITY.STRENGTH"     "complexity.from.pubmed" "MW"                    
+ [7] "AMW"                    "Sv"                     "Se"                    
+[10] "Sp"                    
+slurmstepd: error: *** JOB 343099 ON gpu-0005 CANCELLED AT 2018-11-17T12:48:03 DUE TO TIME LIMIT ***
